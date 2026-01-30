@@ -4,7 +4,7 @@
     <div class="container py-5">
       <div class="text-center mb-5">
         <h1 class="display-4 fw-bold">Kotabaru App Directory</h1>
-        <p class="lead text-muted">Discover the digital innovations powering our region.</p>
+        <p class="lead text-muted">Inovasi digital yang akan mendorong kemajuan wilayah kita</p>
       </div>
       
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4">
