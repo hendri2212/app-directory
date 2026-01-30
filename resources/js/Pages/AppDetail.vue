@@ -129,7 +129,7 @@
                         </p>
                         <a href="https://wa.me/6285746080544" target="_blank"
                             class="btn btn-light btn-lg px-5 py-3 fw-bold text-success shadow hover-lift">
-                            <i class="bi bi-whatsapp me-2"></i> Hubungi Kami via WhatsApp
+                            <i class="bi bi-whatsapp me-2"></i> Chat Sekarang
                         </a>
                     </div>
                     <!-- Decorative circles -->
