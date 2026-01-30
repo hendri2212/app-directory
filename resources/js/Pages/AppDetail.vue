@@ -13,10 +13,11 @@
                         <div class="d-flex gap-3 animate-fade-in-up delay-200">
                             <a href="#contact"
                                 class="btn btn-light btn-lg px-4 fw-bold text-primary shadow-sm hover-lift">
-                                Mulai Sekarang <i class="bi bi-arrow-right ms-2"></i>
+                                <i class="bi bi-whatsapp me-2"></i>
+                                Pesan Sekarang <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                             <a href="#features" class="btn btn-outline-light btn-lg px-4 fw-bold hover-lift">
-                                Pelajari Fitur
+                                Fitur
                             </a>
                         </div>
                     </div>
@@ -27,7 +28,8 @@
                 </div>
             </div>
             <!-- Decorative background shape -->
-            <div class="position-absolute bottom-0 start-0 w-100 overflow-hidden" style="line-height:0">
+            <div class="position-absolute bottom-0 start-0 w-100 overflow-hidden"
+                style="line-height:0; transform: rotate(180deg);">
                 <svg viewBox="0 0 1200 120" preserveAspectRatio="none"
                     style="width: 100%; height: 60px; fill: #ffffff;">
                     <path

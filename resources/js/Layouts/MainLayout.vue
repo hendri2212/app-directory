@@ -1,19 +1,18 @@
 <template>
     <div>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-            <div class="container">
-                <a class="navbar-brand fw-bold" href="/">Kotabaru App Directory</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/">Home</a>
-                        </li>
-                        <!-- Placeholder for future links -->
-                    </ul>
+        <nav class="navbar navbar-expand navbar-dark bg-dark sticky-top shadow-sm">
+            <div class="container d-flex justify-content-between align-items-center">
+                <Link class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+                    <i class="bi bi-grid-fill text-primary"></i>
+                    <span>Kotabaru Apps</span>
+                </Link>
+
+                <div class="d-flex align-items-center gap-3">
+                    <Link href="/" class="btn btn-sm btn-outline-light rounded-pill px-3"
+                        :class="{ 'active': $page.url === '/' }">
+                        Directory
+                    </Link>
                 </div>
             </div>
         </nav>
