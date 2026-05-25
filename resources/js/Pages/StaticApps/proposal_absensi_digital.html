@@ -1275,6 +1275,64 @@
       font-weight: 600;
       color: #065F46
     }
+    /* ── RESPONSIVE DESIGN ── */
+    @media (max-width: 768px) {
+      .page {
+        padding: 24px 20px;
+      }
+      .cover {
+        padding: 40px 20px;
+      }
+      .cover h1 {
+        font-size: 24px;
+      }
+      .problem-grid,
+      .feature-grid,
+      .tech-cols,
+      .pkg-wrapper,
+      .chart-grid,
+      .benefit-grid,
+      .security-grid,
+      .payment-grid,
+      .scope-grid,
+      .exec-highlights {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+      }
+      .arch-row {
+        flex-direction: column;
+      }
+      .arch-arr {
+        transform: rotate(90deg);
+        margin: 8px 0;
+      }
+      .toc-list {
+        column-count: 1;
+      }
+      .cover-meta {
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+      }
+      .cmp-table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .cmp-table {
+        min-width: 600px;
+      }
+      .flow-steps {
+        flex-direction: column;
+      }
+      .flow-arrow {
+        transform: rotate(90deg);
+        margin: 8px 0;
+      }
+      .sign-grid {
+        grid-template-columns: 1fr !important;
+        gap: 40px;
+      }
+    }
   </style>
 </head>
 
@@ -1757,7 +1815,8 @@
 
     <!-- Tabel Perbandingan Fitur -->
     <p style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px">Perbandingan Fitur Lengkap</p>
-    <table class="cmp-table">
+    <div class="cmp-table-wrapper">
+      <table class="cmp-table">
       <thead>
         <tr>
           <th style="width:55%">Fitur</th>
@@ -1953,6 +2012,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <!-- Chart Perbandingan -->
     <div class="chart-grid">
