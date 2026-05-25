@@ -103,6 +103,15 @@ const staticApps = [
         tech_stack: ['RFID', 'Vue.js', 'Laravel'],
         isStatic: true,
         staticUrl: '/e-presensi'
+    },
+    {
+        id: 'static-proposal-absensi',
+        name: 'Proposal Absensi Digital',
+        short_desc: 'Dokumen penawaran dan rancangan sistem absensi digital untuk sekolah dan instansi pemerintahan.',
+        image: '/images/static/proposal.png',
+        tech_stack: ['HTML', 'CSS', 'Proposal'],
+        isStatic: true,
+        staticUrl: '/proposal-absensi'
     }
 ];
 

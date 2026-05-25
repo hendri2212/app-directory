@@ -10,6 +10,10 @@ Route::get('/app/{id}', [ApplicationController::class, 'show'])->name('app.detai
 Route::get('/e-presensi', function () {
     return Inertia::render('StaticApps/EPresensi');
 })->name('static.e-presensi');
+Route::get('/proposal-absensi', function () {
+    return response(file_get_contents(resource_path('js/Pages/StaticApps/proposal_absensi_digital.html')))
+        ->header('Content-Type', 'text/html');
+})->name('static.proposal');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ApplicationController::class, 'dashboard'])->name('dashboard');

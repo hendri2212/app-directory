@@ -1,0 +1,2487 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposal Sistem Absensi Digital RFID & WhatsApp — SMPN 1 Kotabaru</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --blue-dark: #0D2B5E;
+      --blue-main: #1A52A8;
+      --blue-mid: #2D7DD2;
+      --blue-light: #E8F1FC;
+      --teal: #0E9E7B;
+      --teal-light: #E3F7F1;
+      --amber: #F59E0B;
+      --amber-light: #FEF3C7;
+      --gray-100: #F8F9FA;
+      --gray-200: #E9ECEF;
+      --gray-400: #ADB5BD;
+      --gray-600: #6C757D;
+      --gray-800: #343A40;
+      --white: #FFFFFF;
+      --text: #1E293B;
+      --text-muted: #64748B;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: #fff;
+      font-size: 13px;
+      line-height: 1.6
+    }
+
+    /* ── COVER ── */
+    .cover {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue-main) 55%, var(--blue-mid) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05)
+    }
+
+    .cover::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -80px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05)
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 28px
+    }
+
+    .cover-icon {
+      width: 90px;
+      height: 90px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      font-size: 42px
+    }
+
+    .cover h1 {
+      color: #fff;
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.2;
+      max-width: 640px;
+      margin-bottom: 16px
+    }
+
+    .cover-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
+      max-width: 500px;
+      margin-bottom: 48px
+    }
+
+    .cover-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--teal);
+      border-radius: 2px;
+      margin: 0 auto 32px
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 48px;
+      justify-content: center;
+      flex-wrap: wrap
+    }
+
+    .cover-meta-item label {
+      display: block;
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px
+    }
+
+    .cover-meta-item span {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600
+    }
+
+    .cover-version {
+      position: absolute;
+      bottom: 28px;
+      right: 36px;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px
+    }
+
+    /* ── PAGE LAYOUT ── */
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 48px
+    }
+
+    @media print {
+      .cover {
+        min-height: 100vh
+      }
+
+      .page {
+        padding: 32px 48px
+      }
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--blue-light)
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--blue-mid);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 6px
+    }
+
+    h2.section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--blue-dark)
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 6px
+    }
+
+    /* ── EXEC BOX ── */
+    .exec-box {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-main));
+      border-radius: 16px;
+      padding: 36px;
+      color: #fff;
+      margin-bottom: 40px
+    }
+
+    .exec-box p {
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.8;
+      font-size: 13.5px
+    }
+
+    .exec-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 28px
+    }
+
+    .exec-hi {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center
+    }
+
+    .exec-hi .num {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .exec-hi .lbl {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.65);
+      margin-top: 4px
+    }
+
+    /* ── PROBLEM CARDS ── */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px
+    }
+
+    .problem-card {
+      background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start
+    }
+
+    .problem-icon {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0
+    }
+
+    .problem-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .problem-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5
+    }
+
+    /* ── FLOW ── */
+    .flow-steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0 40px;
+      flex-wrap: wrap
+    }
+
+    .flow-step {
+      background: var(--blue-light);
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--blue-dark);
+      flex: 1;
+      min-width: 100px
+    }
+
+    .flow-arrow {
+      color: var(--blue-mid);
+      font-size: 18px;
+      padding: 0 4px;
+      flex-shrink: 0
+    }
+
+    /* ── FEATURE CARDS ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px
+    }
+
+    .feature-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 20px
+    }
+
+    .feat-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 14px
+    }
+
+    .feat-icon.blue {
+      background: var(--blue-light)
+    }
+
+    .feat-icon.teal {
+      background: var(--teal-light)
+    }
+
+    .feat-icon.amber {
+      background: var(--amber-light)
+    }
+
+    .feature-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px
+    }
+
+    .feature-card ul {
+      list-style: none;
+      padding: 0
+    }
+
+    .feature-card ul li {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      padding: 2px 0 2px 14px;
+      position: relative
+    }
+
+    .feature-card ul li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--teal);
+      font-weight: 700
+    }
+
+    /* ── TECH STACK ── */
+    .tech-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px
+    }
+
+    .tech-col {
+      border-radius: 14px;
+      padding: 20px
+    }
+
+    .tech-col.frontend {
+      background: #EEF7FF;
+      border: 1px solid #C3DDF7
+    }
+
+    .tech-col.backend {
+      background: #F0FFF8;
+      border: 1px solid #A0E7CC
+    }
+
+    .tech-col.database {
+      background: #FFF8EC;
+      border: 1px solid #F7D993
+    }
+
+    .tech-col h4 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px
+    }
+
+    .tech-col.frontend h4 {
+      color: var(--blue-main)
+    }
+
+    .tech-col.backend h4 {
+      color: var(--teal)
+    }
+
+    .tech-col.database h4 {
+      color: #B45309
+    }
+
+    .tech-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      margin: 3px 3px 3px 0
+    }
+
+    .tech-col.frontend .tech-badge {
+      background: #C3DDF7;
+      color: var(--blue-dark)
+    }
+
+    .tech-col.backend .tech-badge {
+      background: #A0E7CC;
+      color: #065F46
+    }
+
+    .tech-col.database .tech-badge {
+      background: #F7D993;
+      color: #78350F
+    }
+
+    /* ── ARCH FLOW ── */
+    .arch-flow {
+      background: var(--gray-100);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 40px
+    }
+
+    .arch-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px
+    }
+
+    .arch-box {
+      background: #fff;
+      border: 1.5px solid var(--blue-mid);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--blue-dark);
+      text-align: center;
+      min-width: 110px
+    }
+
+    .arch-box.teal {
+      border-color: var(--teal);
+      color: #065F46
+    }
+
+    .arch-box.amber {
+      border-color: var(--amber);
+      color: #78350F
+    }
+
+    .arch-arr {
+      color: var(--gray-400);
+      font-size: 16px
+    }
+
+    /* ── PACKAGE CARDS ── */
+    .pkg-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px
+    }
+
+    .pkg-card {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid var(--gray-200);
+      position: relative
+    }
+
+    .pkg-card.recommended {
+      border-color: var(--teal)
+    }
+
+    .pkg-head {
+      padding: 24px 28px
+    }
+
+    .pkg-card:not(.recommended) .pkg-head {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-main))
+    }
+
+    .pkg-card.recommended .pkg-head {
+      background: linear-gradient(135deg, #065F46, var(--teal))
+    }
+
+    .pkg-top-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #fff;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px
+    }
+
+    .pkg-card.recommended .pkg-top-badge {
+      background: rgba(255, 255, 255, 0.25)
+    }
+
+    .pkg-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px
+    }
+
+    .pkg-tagline {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 20px
+    }
+
+    .pkg-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px
+    }
+
+    .pkg-price {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .pkg-price-sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7)
+    }
+
+    .pkg-note {
+      margin-top: 10px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      line-height: 1.6
+    }
+
+    .pkg-body {
+      padding: 24px 28px;
+      background: #fff
+    }
+
+    .pkg-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      margin-top: 16px
+    }
+
+    .pkg-section-title:first-child {
+      margin-top: 0
+    }
+
+    .pkg-feat-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 8px
+    }
+
+    .pkg-feat-list li {
+      font-size: 12px;
+      color: var(--text);
+      padding: 4px 0 4px 18px;
+      position: relative;
+      border-bottom: 1px solid var(--gray-100)
+    }
+
+    .pkg-feat-list li:last-child {
+      border-bottom: none
+    }
+
+    .pkg-feat-list li::before {
+      position: absolute;
+      left: 0;
+      font-weight: 700
+    }
+
+    .pkg-feat-list li.inc::before {
+      content: '✓';
+      color: var(--teal)
+    }
+
+    .pkg-feat-list li.exc::before {
+      content: '✗';
+      color: #EF4444
+    }
+
+    .pkg-feat-list li.exc {
+      color: var(--text-muted)
+    }
+
+    .pkg-badge-row {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px
+    }
+
+    .pkg-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600
+    }
+
+    .pkg-badge.inc-hw {
+      background: #DCFCE7;
+      color: #166534
+    }
+
+    .pkg-badge.exc-item {
+      background: #FEE2E2;
+      color: #991B1B
+    }
+
+    .pkg-badge.inc-vps {
+      background: #DBEAFE;
+      color: #1E40AF
+    }
+
+    .pkg-duration {
+      margin-top: 16px;
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text-muted)
+    }
+
+    .pkg-duration strong {
+      color: var(--text)
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .cmp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      font-size: 12px
+    }
+
+    .cmp-table th {
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-align: left;
+      border-bottom: 2px solid var(--gray-200)
+    }
+
+    .cmp-table th:nth-child(2) {
+      background: var(--blue-light);
+      color: var(--blue-dark);
+      text-align: center
+    }
+
+    .cmp-table th:nth-child(3) {
+      background: var(--teal-light);
+      color: #065F46;
+      text-align: center
+    }
+
+    .cmp-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--gray-100);
+      vertical-align: middle
+    }
+
+    .cmp-table td:nth-child(2),
+    .cmp-table td:nth-child(3) {
+      text-align: center
+    }
+
+    .cmp-table tr:hover td {
+      background: var(--gray-100)
+    }
+
+    .cmp-cat {
+      background: var(--gray-100);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted)
+    }
+
+    .cmp-cat td {
+      padding: 8px 16px !important
+    }
+
+    .check {
+      color: var(--teal);
+      font-size: 16px;
+      font-weight: 700
+    }
+
+    .dash {
+      color: var(--gray-400);
+      font-size: 14px
+    }
+
+    /* ── TIMELINE ── */
+    .tl-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      align-items: flex-start
+    }
+
+    .tl-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-main), var(--blue-mid));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .tl-content h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text)
+    }
+
+    .tl-content p {
+      font-size: 12px;
+      color: var(--text-muted)
+    }
+
+    .tl-dur {
+      font-size: 11px;
+      background: var(--blue-light);
+      color: var(--blue-main);
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+      display: inline-block;
+      margin-top: 4px
+    }
+
+    .tl-line {
+      width: 2px;
+      height: 16px;
+      background: var(--gray-200);
+      margin-left: 17px
+    }
+
+    /* ── BENEFIT ── */
+    .benefit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 40px
+    }
+
+    .benefit-card {
+      border-left: 4px solid var(--blue-mid);
+      background: var(--gray-100);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px
+    }
+
+    .benefit-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--blue-dark);
+      margin-bottom: 8px
+    }
+
+    .benefit-card ul {
+      list-style: none;
+      padding: 0
+    }
+
+    .benefit-card ul li {
+      font-size: 12px;
+      color: var(--text-muted);
+      padding: 2px 0 2px 14px;
+      position: relative
+    }
+
+    .benefit-card ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--blue-mid)
+    }
+
+    /* ── SECURITY ── */
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 40px
+    }
+
+    .sec-card {
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center
+    }
+
+    .sec-icon {
+      font-size: 26px;
+      margin-bottom: 8px
+    }
+
+    .sec-card h4 {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .sec-card p {
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    /* ── PAYMENT ── */
+    .payment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 40px
+    }
+
+    .payment-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      overflow: hidden
+    }
+
+    .payment-head {
+      background: var(--blue-dark);
+      color: #fff;
+      padding: 14px 20px
+    }
+
+    .payment-head h4 {
+      font-size: 14px;
+      font-weight: 600
+    }
+
+    .payment-body {
+      padding: 16px 20px
+    }
+
+    .payment-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--gray-200)
+    }
+
+    .payment-row:last-child {
+      border-bottom: none
+    }
+
+    .payment-pct {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--blue-main);
+      min-width: 48px
+    }
+
+    .payment-desc {
+      font-size: 12px;
+      color: var(--text-muted)
+    }
+
+    /* ── CHARTS ── */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 40px
+    }
+
+    .chart-box {
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 20px
+    }
+
+    .chart-box h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .chart-box p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 16px
+    }
+
+    .chart-full {
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 24px
+    }
+
+    .chart-full h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px
+    }
+
+    .chart-full p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 16px
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0
+    }
+
+    /* ── MISC ── */
+    .divider {
+      height: 1px;
+      background: var(--gray-200);
+      margin: 40px 0
+    }
+
+    .info-bar {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue-mid);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 20px;
+      margin-bottom: 24px;
+      font-size: 12.5px;
+      color: var(--blue-dark)
+    }
+
+    .warn-bar {
+      background: #FEF9C3;
+      border-left: 4px solid var(--amber);
+      border-radius: 0 10px 10px 0;
+      padding: 14px 20px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #78350F
+    }
+
+    .scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px
+    }
+
+    .scope-inc {
+      background: #F0FFF8;
+      border: 1px solid #A0E7CC;
+      border-radius: 12px;
+      padding: 16px 20px
+    }
+
+    .scope-exc {
+      background: #FFF5F5;
+      border: 1px solid #FCA5A5;
+      border-radius: 12px;
+      padding: 16px 20px
+    }
+
+    .scope-inc h4 {
+      color: #065F46;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px
+    }
+
+    .scope-exc h4 {
+      color: #991B1B;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px
+    }
+
+    .scope-inc li,
+    .scope-exc li {
+      font-size: 11.5px;
+      margin-left: 16px;
+      padding: 2px 0;
+      color: var(--text)
+    }
+
+    .page-break {
+      page-break-before: always
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      column-count: 2;
+      column-gap: 40px
+    }
+
+    .toc-list li {
+      padding: 6px 0;
+      border-bottom: 1px dotted var(--gray-200);
+      font-size: 12.5px;
+      display: flex;
+      justify-content: space-between
+    }
+
+    .toc-list li a {
+      color: var(--blue-main);
+      text-decoration: none;
+      font-weight: 500
+    }
+
+    .toc-num {
+      color: var(--text-muted);
+      font-size: 11px
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px
+    }
+
+    .kpi-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center
+    }
+
+    .kpi-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue-main)
+    }
+
+    .kpi-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px
+    }
+
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 40px
+    }
+
+    .crit-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      background: var(--gray-100);
+      border-radius: 10px;
+      padding: 12px
+    }
+
+    .crit-no {
+      width: 24px;
+      height: 24px;
+      background: var(--teal);
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .crit-item p {
+      font-size: 12px;
+      color: var(--text)
+    }
+
+    .future-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 32px
+    }
+
+    .future-item {
+      background: var(--gray-100);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .future-item::before {
+      content: '🔮';
+      font-size: 13px
+    }
+
+    .closing-box {
+      background: linear-gradient(135deg, var(--blue-dark), var(--blue-main));
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      color: #fff;
+      margin-bottom: 40px
+    }
+
+    .closing-box h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px
+    }
+
+    .closing-box p {
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 540px;
+      margin: 0 auto 12px;
+      font-size: 13.5px
+    }
+
+    .signature-box {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 60px;
+      margin-bottom: 20px
+    }
+
+    .sig-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 14px;
+      padding: 24px 32px;
+      text-align: center;
+      min-width: 240px
+    }
+
+    .sig-line {
+      border-top: 1px solid var(--gray-400);
+      margin: 48px 0 8px
+    }
+
+    .sig-name {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 13px
+    }
+
+    .sig-title {
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .price-calc-box {
+      background: linear-gradient(135deg, #F0FFF8, #E3F7F1);
+      border: 1px solid #A0E7CC;
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin-bottom: 24px
+    }
+
+    .price-calc-box h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #065F46;
+      margin-bottom: 14px
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #A0E7CC;
+      font-size: 12.5px
+    }
+
+    .calc-row:last-child {
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 6px;
+      padding-top: 12px;
+      border-top: 2px solid #0E9E7B
+    }
+
+    .calc-row .val {
+      font-weight: 600;
+      color: #065F46
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════ COVER ══════════════════════════ -->
+  <div class="cover">
+    <div class="cover-badge">Proposal Penawaran Resmi · Versi 1.0 · 25 Mei 2026</div>
+    <div class="cover-icon">📡</div>
+    <h1>Sistem Absensi Digital Berbasis RFID &amp; WhatsApp</h1>
+    <p class="cover-subtitle">Solusi modern pengelolaan kehadiran siswa — real-time, akurat, dan transparan untuk orang
+      tua</p>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><label>Disusun untuk</label><span>SMPN 1 Kotabaru</span></div>
+      <div class="cover-meta-item"><label>Disusun oleh</label><span>Computer Media Utama</span></div>
+      <div class="cover-meta-item"><label>Tanggal</label><span>25 Mei 2026</span></div>
+    </div>
+    <div class="cover-version">Dokumen ini bersifat rahasia dan hanya untuk keperluan evaluasi.</div>
+  </div>
+
+  <!-- ══════════════════════════ MAIN ══════════════════════════ -->
+  <div class="page">
+
+    <!-- Daftar Isi -->
+    <div class="section-header">
+      <div class="section-label">Navigasi</div>
+      <h2 class="section-title">Daftar Isi</h2>
+    </div>
+    <ul class="toc-list">
+      <li><a href="#ringkasan">1. Ringkasan Eksekutif</a><span class="toc-num">2</span></li>
+      <li><a href="#latar">2. Latar Belakang</a><span class="toc-num">2</span></li>
+      <li><a href="#tujuan">3. Tujuan Pengembangan</a><span class="toc-num">3</span></li>
+      <li><a href="#fitur">4. Fitur Utama Sistem</a><span class="toc-num">3</span></li>
+      <li><a href="#arsitektur">5. Arsitektur Teknis</a><span class="toc-num">4</span></li>
+      <li><a href="#paket">6. Paket Penawaran &amp; Harga</a><span class="toc-num">5</span></li>
+      <li><a href="#lingkup">7. Ruang Lingkup Pekerjaan</a><span class="toc-num">6</span></li>
+      <li><a href="#timeline">8. Timeline Implementasi</a><span class="toc-num">6</span></li>
+      <li><a href="#infra">9. Kebutuhan Infrastruktur</a><span class="toc-num">7</span></li>
+      <li><a href="#manfaat">10. Manfaat untuk Sekolah</a><span class="toc-num">7</span></li>
+      <li><a href="#keamanan">11. Keamanan &amp; Akses</a><span class="toc-num">8</span></li>
+      <li><a href="#pembayaran">12. Skema Pembayaran</a><span class="toc-num">8</span></li>
+      <li><a href="#garansi">13. Garansi &amp; Support</a><span class="toc-num">8</span></li>
+      <li><a href="#kriteria">14. Kriteria Keberhasilan</a><span class="toc-num">9</span></li>
+      <li><a href="#penutup">15. Penutup</a><span class="toc-num">9</span></li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- ══ 1. RINGKASAN EKSEKUTIF ══ -->
+    <div id="ringkasan" class="section-header">
+      <div class="section-label">Bagian 1</div>
+      <h2 class="section-title">Ringkasan Eksekutif</h2>
+    </div>
+    <div class="exec-box">
+      <p>Kami dari <strong>Computer Media Utama</strong> menawarkan solusi <strong>Sistem Absensi Digital Berbasis RFID
+          dan WhatsApp</strong> kepada <strong>SMPN 1 Kotabaru</strong>. Sistem ini dirancang untuk mengelola kehadiran
+        siswa secara lebih cepat, akurat, transparan, dan mudah diawasi. Siswa melakukan presensi menggunakan kartu RFID
+        — data tersimpan langsung ke database, tampil pada dashboard admin, dapat direkap dalam laporan tabel maupun
+        grafik, serta mengirimkan notifikasi WhatsApp kepada orang tua secara otomatis.</p>
+      <div class="exec-highlights">
+        <div class="exec-hi">
+          <div class="num">12+</div>
+          <div class="lbl">Fitur Utama Sistem</div>
+        </div>
+        <div class="exec-hi">
+          <div class="num">2 Paket</div>
+          <div class="lbl">Harga Berbasis Jumlah Siswa</div>
+        </div>
+        <div class="exec-hi">
+          <div class="num">VPS</div>
+          <div class="lbl">Ditanggung Penyedia</div>
+        </div>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-num">⚡</div>
+        <div class="kpi-label">Presensi Real-time</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">📊</div>
+        <div class="kpi-label">Dashboard &amp; Laporan Grafis</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">💬</div>
+        <div class="kpi-label">Notifikasi WhatsApp Otomatis</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-num">🔒</div>
+        <div class="kpi-label">Keamanan JWT &amp; Bcrypt</div>
+      </div>
+    </div>
+
+    <!-- ══ 2. LATAR BELAKANG ══ -->
+    <div id="latar" class="section-header">
+      <div class="section-label">Bagian 2</div>
+      <h2 class="section-title">Latar Belakang</h2>
+      <p class="section-desc">Mengapa SMPN 1 Kotabaru membutuhkan sistem absensi digital?</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">⏱️</div>
+        <div>
+          <h4>Lambat &amp; Mengantre</h4>
+          <p>Pencatatan manual membutuhkan waktu lama, terutama saat jumlah siswa besar dan menyebabkan antrean panjang.
+          </p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📋</div>
+        <div>
+          <h4>Rekap Sering Terlambat</h4>
+          <p>Rekap harian, mingguan, atau bulanan sering terlambat karena data harus dikumpulkan secara manual dari
+            banyak kelas.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">👨‍👩‍👧</div>
+        <div>
+          <h4>Orang Tua Tidak Tahu</h4>
+          <p>Orang tua tidak selalu mendapat informasi tepat waktu apakah anak sudah hadir atau tidak di sekolah.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📉</div>
+        <div>
+          <h4>Data Sulit Dianalisis</h4>
+          <p>Data keterlambatan dan ketidakhadiran sulit dianalisis untuk keperluan pembinaan dan evaluasi siswa.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🗂️</div>
+        <div>
+          <h4>Arsip Rentan Rusak</h4>
+          <p>Arsip absensi manual rentan hilang, rusak, atau tidak konsisten antar kelas dan periode.</p>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">✍️</div>
+        <div>
+          <h4>Kesalahan Input Manual</h4>
+          <p>Potensi kesalahan pencatatan tinggi dan sulit dideteksi tanpa sistem audit yang terstruktur.</p>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;font-weight:600">Alur solusi yang ditawarkan:
+    </p>
+    <div class="flow-steps">
+      <div class="flow-step">🪪 Siswa tap kartu RFID</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">💾 Sistem catat waktu</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">📊 Dashboard diperbarui</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">📈 Laporan siap</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">💬 Notif WA ke ortu</div>
+    </div>
+
+    <!-- ══ 3. TUJUAN ══ -->
+    <div id="tujuan" class="section-header">
+      <div class="section-label">Bagian 3</div>
+      <h2 class="section-title">Tujuan Pengembangan</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:40px">
+      <div style="background:var(--blue-light);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:4px">⚡ Kecepatan</div>
+        <p style="font-size:11.5px;color:var(--text-muted)">Meningkatkan kecepatan proses presensi siswa secara
+          signifikan</p>
+      </div>
+      <div style="background:var(--teal-light);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:4px">✅ Akurasi</div>
+        <p style="font-size:11.5px;color:var(--text-muted)">Mengurangi kesalahan pencatatan absensi yang sering terjadi
+          secara manual</p>
+      </div>
+      <div style="background:var(--amber-light);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#78350F;margin-bottom:4px">📊 Real-time</div>
+        <p style="font-size:11.5px;color:var(--text-muted)">Data kehadiran dapat dipantau langsung oleh admin sekolah
+        </p>
+      </div>
+      <div style="background:var(--blue-light);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:4px">📄 Laporan Mudah</div>
+        <p style="font-size:11.5px;color:var(--text-muted)">Laporan berdasarkan tanggal, kelas, dan status kehadiran
+          siap dalam hitungan detik</p>
+      </div>
+      <div style="background:var(--teal-light);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:4px">💬 Notifikasi WA</div>
+        <p style="font-size:11.5px;color:var(--text-muted)">Orang tua mendapat informasi kehadiran anak secara otomatis
+          lewat WhatsApp</p>
+      </div>
+      <div style="background:var(--amber-light);border-radius:10px;padding:14px">
+        <div style="font-size:13px;font-weight:700;color:#78350F;margin-bottom:4px">📈 Data Pembinaan</div>
+        <p style="font-size:11.5px;color:var(--text-muted)">Fondasi data untuk pembinaan siswa yang sering terlambat
+          atau tidak hadir</p>
+      </div>
+    </div>
+
+    <!-- ══ 4. FITUR UTAMA ══ -->
+    <div id="fitur" class="section-header page-break">
+      <div class="section-label">Bagian 4</div>
+      <h2 class="section-title">Fitur Utama Sistem</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feat-icon blue">🪪</div>
+        <h4>Presensi RFID Siswa</h4>
+        <ul>
+          <li>Baca UID RFID &amp; cari data siswa</li>
+          <li>Catat jam masuk/pulang otomatis</li>
+          <li>Cegah duplicate tap</li>
+          <li>Tampilkan nama &amp; status di layar</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon teal">💬</div>
+        <h4>Notifikasi WhatsApp Orang Tua</h4>
+        <ul>
+          <li>Pesan otomatis ke nomor wali</li>
+          <li>Template pesan dari data sekolah</li>
+          <li>Antrian &amp; retry otomatis</li>
+          <li>Format: nama, kelas, waktu presensi</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon amber">👤</div>
+        <h4>Manajemen Data Siswa</h4>
+        <ul>
+          <li>CRUD lengkap (NISN, RFID, dll)</li>
+          <li>Import massal dari Excel</li>
+          <li>Relasi kelas &amp; orang tua/wali</li>
+          <li>Akun user siswa otomatis</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon blue">📊</div>
+        <h4>Laporan &amp; Grafik Interaktif</h4>
+        <ul>
+          <li>Filter periode, tanggal, kelas</li>
+          <li>Status: tepat waktu, terlambat, absen</li>
+          <li>Grafik tren kehadiran harian</li>
+          <li>Top 10 siswa paling sering terlambat</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon teal">🏫</div>
+        <h4>Dashboard Admin Sekolah</h4>
+        <ul>
+          <li>11 menu pengelolaan data</li>
+          <li>Manajemen kelas &amp; guru</li>
+          <li>Data absensi harian real-time</li>
+          <li>Modul pembinaan siswa</li>
+        </ul>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon amber">🔐</div>
+        <h4>Manajemen User &amp; Role</h4>
+        <ul>
+          <li>Role: Superadmin, Admin, Teacher, Student</li>
+          <li>Login JWT + Bcrypt password</li>
+          <li>Proteksi halaman &amp; menu</li>
+          <li>Status akun aktif/nonaktif</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Contoh pesan WA -->
+    <div
+      style="background:var(--gray-100);border-radius:14px;padding:20px;margin-bottom:40px;display:flex;gap:20px;align-items:flex-start">
+      <div style="font-size:32px">💬</div>
+      <div>
+        <p style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px">Contoh Pesan WhatsApp Otomatis ke
+          Orang Tua/Wali:</p>
+        <div
+          style="background:#fff;border-radius:12px;padding:14px 18px;border:1px solid var(--gray-200);max-width:420px">
+          <p style="font-size:12.5px;color:var(--text);line-height:1.7">Selamat pagi. Siswa atas nama <strong>[Nama
+              Siswa]</strong> kelas <strong>[Kelas]</strong> telah melakukan presensi di <strong>SMPN 1
+              Kotabaru</strong> pada <strong>[Hari, Tanggal]</strong> pukul <strong>[Jam]</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 5. ARSITEKTUR TEKNIS ══ -->
+    <div id="arsitektur" class="section-header">
+      <div class="section-label">Bagian 5</div>
+      <h2 class="section-title">Arsitektur Teknis</h2>
+    </div>
+    <div class="arch-flow">
+      <p
+        style="font-size:11px;font-weight:700;color:var(--text-muted);text-align:center;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px">
+        Alur Sistem Presensi RFID</p>
+      <div class="arch-row">
+        <div class="arch-box">🪪 RFID Scanner</div>
+        <div class="arch-arr">→</div>
+        <div class="arch-box">🌐 Frontend Vue 3</div>
+        <div class="arch-arr">→</div>
+        <div class="arch-box">🔌 Backend API Go + Gin</div>
+      </div>
+      <div style="text-align:center;color:var(--gray-400);font-size:18px;margin:4px 0">↓</div>
+      <div class="arch-row">
+        <div class="arch-box teal">📤 WA Gateway (Antrian)</div>
+        <div class="arch-arr">←</div>
+        <div class="arch-box">🗄️ MySQL + VPS</div>
+        <div class="arch-arr">→</div>
+        <div class="arch-box amber">📊 Dashboard Admin</div>
+      </div>
+      <div style="text-align:center;color:var(--gray-400);font-size:18px;margin:4px 0">↓</div>
+      <div class="arch-row">
+        <div class="arch-box teal">💬 Notif ke Orang Tua/Wali</div>
+      </div>
+    </div>
+    <div class="tech-cols">
+      <div class="tech-col frontend">
+        <h4>Frontend</h4>
+        <span class="tech-badge">Vue 3</span><span class="tech-badge">Vite</span><span class="tech-badge">Vue
+          Router</span><span class="tech-badge">Pinia</span><span class="tech-badge">Chart.js</span><span
+          class="tech-badge">Bootstrap</span>
+      </div>
+      <div class="tech-col backend">
+        <h4>Backend</h4>
+        <span class="tech-badge">Go</span><span class="tech-badge">Gin Framework</span><span class="tech-badge">GORM
+          ORM</span><span class="tech-badge">JWT Auth</span><span class="tech-badge">Bcrypt</span><span
+          class="tech-badge">Excelize</span>
+      </div>
+      <div class="tech-col database">
+        <h4>Database &amp; Infra</h4>
+        <span class="tech-badge">MySQL</span><span class="tech-badge">Auto Migration</span><span class="tech-badge">VPS
+          Linux</span><span class="tech-badge">SSL/HTTPS</span><span class="tech-badge">WA Gateway</span>
+      </div>
+    </div>
+
+    <!-- ══ 6. PAKET PENAWARAN ══ -->
+    <div id="paket" class="section-header page-break">
+      <div class="section-label">Bagian 6</div>
+      <h2 class="section-title">Paket Penawaran &amp; Harga</h2>
+      <p class="section-desc">Harga dihitung per siswa per tahun — skalabel sesuai jumlah siswa aktif</p>
+    </div>
+
+    <div class="info-bar">
+      💡 <strong>VPS server ditanggung sepenuhnya oleh Computer Media Utama</strong> pada kedua paket. Sekolah tidak
+      perlu mengeluarkan biaya tambahan untuk hosting atau server.
+    </div>
+    <div class="warn-bar">
+      ⚠️ <strong>Tidak termasuk kedua paket:</strong> Koneksi internet, UPS, Mini PC/komputer presensi, dan monitor —
+      perlu disiapkan oleh pihak sekolah.
+    </div>
+
+    <!-- Dua Paket Besar -->
+    <div class="pkg-wrapper">
+
+      <!-- PAKET A -->
+      <div class="pkg-card">
+        <div class="pkg-head">
+          <div class="pkg-top-badge">Paket A · Dasar</div>
+          <div class="pkg-name">Paket Dasar</div>
+          <div class="pkg-tagline">Presensi RFID + Dashboard Admin + Hardware lengkap</div>
+          <div class="pkg-price-row">
+            <span class="pkg-price">Rp 30.000</span>
+            <span class="pkg-price-sub">/ siswa / tahun</span>
+          </div>
+          <div class="pkg-note">
+            ✅ Sudah termasuk: RFID reader &amp; kartu RFID per siswa<br>
+            🖥️ VPS server ditanggung penyedia<br>
+            ❌ Tidak termasuk: internet, UPS, Mini PC, monitor
+          </div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-section-title">Setup &amp; Infrastruktur</div>
+          <ul class="pkg-feat-list">
+            <li class="inc">Setup aplikasi frontend &amp; backend</li>
+            <li class="inc">Database MySQL + VPS (ditanggung penyedia)</li>
+            <li class="inc">Konfigurasi environment production</li>
+            <li class="inc">RFID reader USB + kartu RFID per siswa</li>
+            <li class="inc">Deployment ke server &amp; konfigurasi domain</li>
+          </ul>
+          <div class="pkg-section-title">Fitur Inti</div>
+          <ul class="pkg-feat-list">
+            <li class="inc">Halaman presensi RFID (masuk &amp; pulang)</li>
+            <li class="inc">Dashboard admin sekolah</li>
+            <li class="inc">Manajemen siswa, kelas, orang tua</li>
+            <li class="inc">Import siswa massal dari Excel</li>
+            <li class="inc">Data absensi harian real-time</li>
+            <li class="inc">Login admin + role superadmin &amp; admin</li>
+            <li class="inc">Training admin 1 sesi</li>
+            <li class="exc">Notifikasi WhatsApp ke orang tua</li>
+            <li class="exc">Laporan grafis &amp; tren kehadiran</li>
+            <li class="exc">Laporan periode dengan filter kelas</li>
+            <li class="exc">Manajemen guru &amp; wali kelas</li>
+            <li class="exc">Modul pembinaan siswa</li>
+          </ul>
+          <div class="pkg-badge-row">
+            <span class="pkg-badge inc-hw">✓ RFID Reader</span>
+            <span class="pkg-badge inc-hw">✓ Kartu RFID</span>
+            <span class="pkg-badge inc-vps">✓ VPS Gratis</span>
+            <span class="pkg-badge exc-item">✗ Internet</span>
+            <span class="pkg-badge exc-item">✗ UPS</span>
+            <span class="pkg-badge exc-item">✗ Mini PC</span>
+          </div>
+          <div class="pkg-duration">
+            <strong>Estimasi implementasi:</strong> 2–3 minggu kerja
+          </div>
+        </div>
+      </div>
+
+      <!-- PAKET B -->
+      <div class="pkg-card recommended">
+        <div class="pkg-head">
+          <div class="pkg-top-badge">⭐ Paket B · Standar — Rekomendasi</div>
+          <div class="pkg-name">Paket Standar</div>
+          <div class="pkg-tagline">Paket A + WA Notifikasi + Laporan Lengkap</div>
+          <div class="pkg-price-row">
+            <span class="pkg-price">Rp 230.000</span>
+            <span class="pkg-price-sub">/ siswa / tahun</span>
+          </div>
+          <div class="pkg-note">
+            ✅ Termasuk notifikasi WA: Rp 500 / notifikasi terkirim<br>
+            ✅ VPS server ditanggung penyedia<br>
+            ❌ Tidak termasuk: internet, UPS, Mini PC, monitor
+          </div>
+        </div>
+        <div class="pkg-body">
+          <div class="pkg-section-title">Semua Fitur Paket A, ditambah:</div>
+          <ul class="pkg-feat-list">
+            <li class="inc">Integrasi WhatsApp gateway</li>
+            <li class="inc">Template pesan WA kustom sekolah</li>
+            <li class="inc">Antrian &amp; retry otomatis notifikasi</li>
+            <li class="inc">Laporan absensi periode (filter tanggal &amp; kelas)</li>
+            <li class="inc">Laporan grafis interaktif (5 jenis grafik)</li>
+            <li class="inc">Status tepat waktu / terlambat / tidak hadir</li>
+            <li class="inc">Top 10 siswa paling sering terlambat</li>
+            <li class="inc">Tren kehadiran harian &amp; per kelas</li>
+            <li class="inc">Manajemen guru &amp; wali kelas</li>
+            <li class="inc">Role teacher &amp; student lengkap</li>
+            <li class="inc">Modul pembinaan siswa (fondasi)</li>
+            <li class="inc">Training admin + operator presensi</li>
+          </ul>
+          <div class="pkg-badge-row">
+            <span class="pkg-badge inc-hw">✓ RFID Reader</span>
+            <span class="pkg-badge inc-hw">✓ Kartu RFID</span>
+            <span class="pkg-badge inc-vps">✓ VPS Gratis</span>
+            <span class="pkg-badge inc-hw">✓ WA Notif</span>
+            <span class="pkg-badge exc-item">✗ Internet</span>
+            <span class="pkg-badge exc-item">✗ UPS</span>
+            <span class="pkg-badge exc-item">✗ Mini PC</span>
+          </div>
+          <div class="pkg-duration">
+            <strong>Estimasi implementasi:</strong> 3–5 minggu kerja
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulasi Harga -->
+    <div style="margin-bottom:40px">
+      <p style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px">💰 Simulasi Estimasi Biaya Tahunan
+      </p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="price-calc-box">
+          <h4>Paket A · Dasar</h4>
+          <div class="calc-row"><span>Asumsi jumlah siswa</span><span class="val">500 siswa</span></div>
+          <div class="calc-row"><span>Biaya per siswa/tahun</span><span class="val">Rp 30.000</span></div>
+          <div class="calc-row"><span>Biaya RFID reader (est.)</span><span class="val">Sudah termasuk</span></div>
+          <div class="calc-row"><span>Biaya kartu RFID</span><span class="val">Sudah termasuk</span></div>
+          <div class="calc-row"><span style="font-weight:700">Total per tahun</span><span class="val"
+              style="color:#065F46;font-size:15px">Rp 15.000.000</span></div>
+        </div>
+        <div class="price-calc-box" style="background:linear-gradient(135deg,#F0FFF8,#DCFCE7);border-color:#6EE7B7">
+          <h4>Paket B · Standar (Rekomendasi)</h4>
+          <div class="calc-row"><span>Asumsi jumlah siswa</span><span class="val">500 siswa</span></div>
+          <div class="calc-row"><span>Biaya per siswa/tahun</span><span class="val">Rp 230.000</span></div>
+          <div class="calc-row"><span>Notif WA (asumsi 500 notif/hari × 240 hari)</span><span class="val">Termasuk
+              paket</span></div>
+          <div class="calc-row"><span style="font-weight:700">Total per tahun</span><span class="val"
+              style="color:#065F46;font-size:15px">Rp 115.000.000</span></div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:10px;font-style:italic">* Simulasi di atas menggunakan
+        asumsi 500 siswa aktif. Biaya aktual disesuaikan dengan jumlah siswa terdaftar di SMPN 1 Kotabaru.</p>
+    </div>
+
+    <!-- Tabel Perbandingan Fitur -->
+    <p style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:16px">Perbandingan Fitur Lengkap</p>
+    <table class="cmp-table">
+      <thead>
+        <tr>
+          <th style="width:55%">Fitur</th>
+          <th style="width:22.5%">Paket A · Dasar<br><small style="font-weight:400;font-size:10px">Rp
+              30.000/siswa/thn</small></th>
+          <th style="width:22.5%">Paket B · Standar<br><small style="font-weight:400;font-size:10px">Rp
+              230.000/siswa/thn</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cmp-cat">
+          <td colspan="3">Hardware &amp; Infrastruktur</td>
+        </tr>
+        <tr>
+          <td>RFID reader USB</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Kartu RFID per siswa</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>VPS server (ditanggung penyedia)</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Internet, UPS, Mini PC, Monitor</td>
+          <td><span class="dash">Tidak termasuk</span></td>
+          <td><span class="dash">Tidak termasuk</span></td>
+        </tr>
+
+        <tr class="cmp-cat">
+          <td colspan="3">Aplikasi &amp; Setup</td>
+        </tr>
+        <tr>
+          <td>Setup aplikasi frontend &amp; backend</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Database MySQL + konfigurasi production</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Deployment + konfigurasi domain/subdomain</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <tr class="cmp-cat">
+          <td colspan="3">Fitur Presensi</td>
+        </tr>
+        <tr>
+          <td>Halaman presensi RFID</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Pencatatan jam masuk &amp; pulang otomatis</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Pencegahan duplicate tap</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Tampilan nama siswa di layar presensi</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <tr class="cmp-cat">
+          <td colspan="3">Manajemen Data</td>
+        </tr>
+        <tr>
+          <td>Manajemen siswa, kelas, orang tua</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Import data siswa dari Excel</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Data absensi harian real-time</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Login admin + role superadmin &amp; admin</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Manajemen guru &amp; wali kelas</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Role teacher &amp; student</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <tr class="cmp-cat">
+          <td colspan="3">Notifikasi WhatsApp</td>
+        </tr>
+        <tr>
+          <td>Integrasi WhatsApp gateway</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Template pesan kustom</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Antrian &amp; retry otomatis</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Biaya per notifikasi</td>
+          <td><span class="dash">–</span></td>
+          <td style="font-size:11.5px;font-weight:600;color:var(--text)">Rp 500/notif ✓</td>
+        </tr>
+
+        <tr class="cmp-cat">
+          <td colspan="3">Laporan &amp; Analitik</td>
+        </tr>
+        <tr>
+          <td>Laporan absensi periode (filter tanggal &amp; kelas)</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Laporan grafis interaktif (5 jenis grafik)</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Status tepat waktu / terlambat / tidak hadir</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Top 10 siswa paling sering terlambat</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Tren kehadiran harian &amp; per kelas</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Modul pembinaan siswa</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <tr class="cmp-cat">
+          <td colspan="3">Pelatihan &amp; Support</td>
+        </tr>
+        <tr>
+          <td>Training admin 1 sesi</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Training operator presensi</td>
+          <td><span class="dash">–</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+        <tr>
+          <td>Garansi bug fixing 30 hari</td>
+          <td><span class="check">✓</span></td>
+          <td><span class="check">✓</span></td>
+        </tr>
+
+        <tr style="background:var(--gray-100)">
+          <td style="font-weight:700;font-size:13px">Harga per Siswa per Tahun</td>
+          <td style="text-align:center;font-weight:800;font-size:14px;color:var(--blue-dark)">Rp 30.000</td>
+          <td style="text-align:center;font-weight:800;font-size:14px;color:#065F46">Rp 230.000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Chart Perbandingan -->
+    <div class="chart-grid">
+      <div class="chart-box">
+        <h4>Cakupan Fitur per Paket</h4>
+        <p>Jumlah fitur yang tersedia di masing-masing paket</p>
+        <div class="legend">
+          <span><span class="legend-dot" style="background:#1A52A8"></span>Paket A</span>
+          <span><span class="legend-dot" style="background:#0E9E7B"></span>Paket B</span>
+        </div>
+        <div style="position:relative;height:220px"><canvas id="chartPaket" role="img"
+            aria-label="Bar chart cakupan fitur paket A vs B">Paket A: 12 fitur, Paket B: 24 fitur.</canvas></div>
+      </div>
+      <div class="chart-box">
+        <h4>Distribusi Modul Sistem</h4>
+        <p>Komposisi modul yang ditawarkan dalam keseluruhan sistem</p>
+        <div style="position:relative;height:220px"><canvas id="chartModul" role="img"
+            aria-label="Donut chart distribusi modul">6 modul utama sistem absensi.</canvas></div>
+      </div>
+    </div>
+
+    <!-- ══ 7. RUANG LINGKUP ══ -->
+    <div id="lingkup" class="section-header">
+      <div class="section-label">Bagian 7</div>
+      <h2 class="section-title">Ruang Lingkup Pekerjaan</h2>
+    </div>
+    <div class="scope-grid">
+      <div class="scope-inc">
+        <h4>✅ Termasuk dalam Penawaran</h4>
+        <ul>
+          <li>Aplikasi web absensi digital</li>
+          <li>Backend API + Database MySQL</li>
+          <li>VPS server (ditanggung Computer Media Utama)</li>
+          <li>Halaman presensi RFID</li>
+          <li>Dashboard admin + 11 modul</li>
+          <li>Import data siswa (Excel)</li>
+          <li>RFID reader + kartu RFID siswa</li>
+          <li>Integrasi WhatsApp gateway (Paket B)</li>
+          <li>Deployment + konfigurasi domain</li>
+          <li>Dokumentasi teknis dasar</li>
+          <li>Sesi training admin &amp; operator</li>
+          <li>Garansi bug fixing 30 hari</li>
+        </ul>
+      </div>
+      <div class="scope-exc">
+        <h4>❌ Tidak Termasuk (kecuali disepakati)</h4>
+        <ul>
+          <li>Koneksi internet di lokasi presensi</li>
+          <li>UPS (Uninterruptible Power Supply)</li>
+          <li>Mini PC / komputer / laptop presensi</li>
+          <li>Monitor di area presensi</li>
+          <li>Biaya domain berbayar</li>
+          <li>Integrasi Dapodik, e-Rapor, fingerprint</li>
+          <li>Aplikasi mobile native Android/iOS</li>
+          <li>Custom laporan di luar scope awal</li>
+          <li>Maintenance setelah masa garansi</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ══ 8. TIMELINE ══ -->
+    <div id="timeline" class="section-header">
+      <div class="section-label">Bagian 8</div>
+      <h2 class="section-title">Estimasi Timeline Implementasi</h2>
+      <p class="section-desc">Bersifat estimasi dan dapat berubah sesuai kesiapan data &amp; keputusan fitur final</p>
+    </div>
+    <div class="chart-full">
+      <h4>Gantt Chart — Estimasi per Fase</h4>
+      <p>Durasi estimasi masing-masing fase dalam hari kerja</p>
+      <div style="position:relative;height:300px"><canvas id="chartTimeline" role="img"
+          aria-label="Horizontal bar chart timeline implementasi">10 fase implementasi.</canvas></div>
+    </div>
+    <div style="margin-bottom:40px">
+      <div class="tl-item">
+        <div class="tl-dot">1</div>
+        <div class="tl-content">
+          <h4>Kickoff &amp; Finalisasi Kebutuhan</h4>
+          <p>Pertemuan awal, pengumpulan data sekolah SMPN 1 Kotabaru</p><span class="tl-dur">2–3 hari kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">2</div>
+        <div class="tl-content">
+          <h4>Setup Server &amp; Environment</h4>
+          <p>Setup VPS, database MySQL, environment development &amp; production</p><span class="tl-dur">2–4 hari
+            kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">3</div>
+        <div class="tl-content">
+          <h4>Implementasi Dashboard &amp; Master Data</h4>
+          <p>Setup modul data utama, dashboard admin, manajemen siswa &amp; kelas</p><span class="tl-dur">4–7 hari
+            kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">4</div>
+        <div class="tl-content">
+          <h4>Implementasi Presensi RFID</h4>
+          <p>Integrasi scanner, alur presensi masuk &amp; pulang, pencegahan duplicate</p><span class="tl-dur">3–5 hari
+            kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">5</div>
+        <div class="tl-content">
+          <h4>Import Data Siswa &amp; Validasi</h4>
+          <p>Import data awal dari Excel, validasi baris per baris, perbaikan error</p><span class="tl-dur">3–7 hari
+            kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">6</div>
+        <div class="tl-content">
+          <h4>Integrasi WhatsApp Gateway <span
+              style="font-size:10px;background:var(--teal-light);color:var(--teal);padding:2px 8px;border-radius:10px;margin-left:4px">Paket
+              B</span></h4>
+          <p>Koneksi ke WA gateway, antrian notifikasi, template pesan SMPN 1 Kotabaru</p><span class="tl-dur">3–5 hari
+            kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">7</div>
+        <div class="tl-content">
+          <h4>Laporan &amp; Grafis <span
+              style="font-size:10px;background:var(--teal-light);color:var(--teal);padding:2px 8px;border-radius:10px;margin-left:4px">Paket
+              B</span></h4>
+          <p>Modul laporan periode, filter kelas/tanggal, grafik interaktif 5 jenis</p><span class="tl-dur">4–7 hari
+            kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">8</div>
+        <div class="tl-content">
+          <h4>Testing End-to-End &amp; Perbaikan</h4>
+          <p>Pengujian menyeluruh seluruh fitur, perbaikan bug</p><span class="tl-dur">4–7 hari kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">9</div>
+        <div class="tl-content">
+          <h4>Deployment Production &amp; Training</h4>
+          <p>Launch ke server production, sesi pelatihan admin &amp; operator SMPN 1 Kotabaru</p><span
+            class="tl-dur">2–4 hari kerja</span>
+        </div>
+      </div>
+      <div class="tl-line"></div>
+      <div class="tl-item">
+        <div class="tl-dot">10</div>
+        <div class="tl-content">
+          <h4>Masa Pendampingan Awal</h4>
+          <p>Pendampingan penggunaan sistem di awal operasional</p><span class="tl-dur">1–4 minggu (sesuai paket)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ 9. INFRASTRUKTUR ══ -->
+    <div id="infra" class="section-header page-break">
+      <div class="section-label">Bagian 9</div>
+      <h2 class="section-title">Kebutuhan Infrastruktur</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+      <div style="border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+        <div style="font-size:24px;margin-bottom:12px">🖥️</div>
+        <h4 style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px">Server / VPS</h4>
+        <div
+          style="background:#DCFCE7;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;font-weight:600;color:#166534">
+          ✅ Ditanggung Computer Media Utama</div>
+        <ul style="list-style:none;padding:0;font-size:12px;color:var(--text-muted)">
+          <li style="padding:3px 0">• VPS 2 vCPU</li>
+          <li style="padding:3px 0">• RAM 2–4 GB</li>
+          <li style="padding:3px 0">• Storage SSD 40 GB</li>
+          <li style="padding:3px 0">• OS Linux + MySQL</li>
+          <li style="padding:3px 0">• SSL Certificate</li>
+        </ul>
+      </div>
+      <div style="border:2px dashed #FCA5A5;border-radius:14px;padding:20px;background:#FFF5F5">
+        <div style="font-size:24px;margin-bottom:12px">📡</div>
+        <h4 style="font-size:13px;font-weight:700;color:#991B1B;margin-bottom:10px">Disiapkan Sekolah</h4>
+        <div
+          style="background:#FEE2E2;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;font-weight:600;color:#991B1B">
+          ⚠️ Tidak termasuk kedua paket</div>
+        <ul style="list-style:none;padding:0;font-size:12px;color:var(--text-muted)">
+          <li style="padding:3px 0">• Mini PC / laptop presensi</li>
+          <li style="padding:3px 0">• Monitor di area presensi</li>
+          <li style="padding:3px 0">• Koneksi internet stabil</li>
+          <li style="padding:3px 0">• UPS (opsional, direkomendasikan)</li>
+        </ul>
+      </div>
+      <div style="border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+        <div style="font-size:24px;margin-bottom:12px">💬</div>
+        <h4 style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px">WhatsApp Gateway</h4>
+        <div
+          style="background:#DBEAFE;border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;font-weight:600;color:#1E40AF">
+          ✅ Termasuk Paket B</div>
+        <ul style="list-style:none;padding:0;font-size:12px;color:var(--text-muted)">
+          <li style="padding:3px 0">• Akun WhatsApp pengirim</li>
+          <li style="padding:3px 0">• Layanan WA gateway</li>
+          <li style="padding:3px 0">• Rp 500 / notifikasi terkirim</li>
+          <li style="padding:3px 0">• Nomor wali format valid (62xxx)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn-bar" style="margin-top:16px">⚠️ Kebutuhan data dari pihak sekolah: data siswa Excel, data kelas,
+      nomor WA orang tua, logo sekolah, NPSN, dan perangkat presensi (Mini PC + monitor + internet).</div>
+
+    <!-- ══ 10. MANFAAT ══ -->
+    <div id="manfaat" class="section-header">
+      <div class="section-label">Bagian 10</div>
+      <h2 class="section-title">Manfaat untuk SMPN 1 Kotabaru</h2>
+    </div>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <h4>🏫 Manajemen Sekolah</h4>
+        <ul>
+          <li>Data kehadiran lebih akurat</li>
+          <li>Rekap absensi lebih cepat</li>
+          <li>Analisis tren keterlambatan</li>
+          <li>Keputusan pembinaan berbasis data</li>
+          <li>Citra sekolah lebih modern</li>
+        </ul>
+      </div>
+      <div class="benefit-card">
+        <h4>🗂️ Admin / Tata Usaha</h4>
+        <ul>
+          <li>Input dan rekap data lebih mudah</li>
+          <li>Import siswa massal dari Excel</li>
+          <li>Data absensi tersimpan rapi</li>
+          <li>Pencarian dan filter praktis</li>
+          <li>Laporan siap lebih cepat</li>
+        </ul>
+      </div>
+      <div class="benefit-card">
+        <h4>👩‍🏫 Guru / Wali Kelas</h4>
+        <ul>
+          <li>Pantau kehadiran per kelas</li>
+          <li>Identifikasi siswa terlambat</li>
+          <li>Dukung pembinaan siswa</li>
+          <li>Kurangi beban pencatatan</li>
+        </ul>
+      </div>
+      <div class="benefit-card">
+        <h4>👨‍👩‍👧 Orang Tua / Wali</h4>
+        <ul>
+          <li>Info kehadiran anak lebih cepat</li>
+          <li>Rasa aman dan keterlibatan meningkat</li>
+          <li>Komunikasi lebih transparan</li>
+          <li>Tidak perlu tanya-tanya ke sekolah</li>
+        </ul>
+      </div>
+    </div>
+    <div class="chart-full">
+      <h4>Manfaat yang Dirasakan per Pemangku Kepentingan</h4>
+      <p>Estimasi tingkat manfaat yang diterima oleh setiap pihak dalam ekosistem sekolah</p>
+      <div class="legend">
+        <span><span class="legend-dot" style="background:#1A52A8"></span>Manajemen</span>
+        <span><span class="legend-dot" style="background:#0E9E7B"></span>Admin TU</span>
+        <span><span class="legend-dot" style="background:#F59E0B"></span>Guru</span>
+        <span><span class="legend-dot" style="background:#8B5CF6"></span>Orang Tua</span>
+      </div>
+      <div style="position:relative;height:280px"><canvas id="chartManfaat" role="img"
+          aria-label="Radar chart manfaat per pemangku kepentingan">Radar chart manfaat sistem.</canvas></div>
+    </div>
+
+    <!-- ══ 11. KEAMANAN ══ -->
+    <div id="keamanan" class="section-header">
+      <div class="section-label">Bagian 11</div>
+      <h2 class="section-title">Keamanan &amp; Kontrol Akses</h2>
+    </div>
+    <div class="security-grid">
+      <div class="sec-card">
+        <div class="sec-icon">🔑</div>
+        <h4>JWT Authentication</h4>
+        <p>Token berbasis JWT untuk proteksi seluruh endpoint API</p>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon">🔒</div>
+        <h4>Bcrypt Hashing</h4>
+        <p>Password disimpan dalam bentuk hash bcrypt yang aman</p>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon">👥</div>
+        <h4>Role-based Access</h4>
+        <p>4 role user dengan pembatasan akses fitur berbeda</p>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon">🌐</div>
+        <h4>CORS Protection</h4>
+        <p>Konfigurasi CORS sesuai environment production</p>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon">🗄️</div>
+        <h4>Foreign Key Constraint</h4>
+        <p>Integritas data relasional dijaga di level database</p>
+      </div>
+      <div class="sec-card">
+        <div class="sec-icon">🚫</div>
+        <h4>Akun Nonaktif</h4>
+        <p>Admin dapat menonaktifkan akun tanpa menghapus data</p>
+      </div>
+    </div>
+
+    <!-- ══ 12. PEMBAYARAN ══ -->
+    <div id="pembayaran" class="section-header">
+      <div class="section-label">Bagian 12</div>
+      <h2 class="section-title">Skema Pembayaran</h2>
+    </div>
+    <div class="payment-grid">
+      <div class="payment-card">
+        <div class="payment-head">
+          <h4>Opsi 1 — Dua Tahap</h4>
+        </div>
+        <div class="payment-body">
+          <div class="payment-row"><span class="payment-pct">50%</span><span class="payment-desc">Saat proposal
+              disetujui dan pekerjaan dimulai</span></div>
+          <div class="payment-row"><span class="payment-pct">50%</span><span class="payment-desc">Setelah deployment
+              production dan training selesai</span></div>
+        </div>
+      </div>
+      <div class="payment-card">
+        <div class="payment-head">
+          <h4>Opsi 2 — Tiga Tahap</h4>
+        </div>
+        <div class="payment-body">
+          <div class="payment-row"><span class="payment-pct">40%</span><span class="payment-desc">Saat proposal
+              disetujui dan pekerjaan dimulai</span></div>
+          <div class="payment-row"><span class="payment-pct">30%</span><span class="payment-desc">Setelah fitur utama
+              selesai dan siap diuji</span></div>
+          <div class="payment-row"><span class="payment-pct">30%</span><span class="payment-desc">Setelah deployment
+              production dan serah terima</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="info-bar">💡 Pembayaran dapat disesuaikan dengan kebijakan pengadaan SMPN 1 Kotabaru.</div>
+
+    <!-- ══ 13. GARANSI ══ -->
+    <div id="garansi" class="section-header">
+      <div class="section-label">Bagian 13</div>
+      <h2 class="section-title">Garansi &amp; Support</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px">
+      <div style="border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+        <div style="font-size:20px;margin-bottom:10px">🛡️</div>
+        <h4 style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px">Garansi Bug Fixing</h4>
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px"><strong style="color:var(--text)">30
+            hari</strong> setelah serah terima sistem</p>
+        <p style="font-size:11.5px;color:var(--text-muted)">Perbaikan bug hanya mencakup fitur dalam ruang lingkup awal.
+          Permintaan fitur baru dihitung sebagai change request terpisah.</p>
+      </div>
+      <div style="border:1px solid var(--gray-200);border-radius:14px;padding:20px">
+        <div style="font-size:20px;margin-bottom:10px">🔧</div>
+        <h4 style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px">Opsi Maintenance Bulanan
+        </h4>
+        <ul style="list-style:none;padding:0;font-size:12px;color:var(--text-muted)">
+          <li style="padding:3px 0 3px 14px;position:relative"><span
+              style="position:absolute;left:0;color:var(--teal)">✓</span>Monitoring aplikasi &amp; server</li>
+          <li style="padding:3px 0 3px 14px;position:relative"><span
+              style="position:absolute;left:0;color:var(--teal)">✓</span>Backup database berkala</li>
+          <li style="padding:3px 0 3px 14px;position:relative"><span
+              style="position:absolute;left:0;color:var(--teal)">✓</span>Bantuan teknis admin sekolah</li>
+          <li style="padding:3px 0 3px 14px;position:relative"><span
+              style="position:absolute;left:0;color:var(--teal)">✓</span>Update minor &amp; penyesuaian laporan</li>
+          <li style="padding:3px 0 3px 14px;position:relative"><span
+              style="position:absolute;left:0;color:var(--teal)">✓</span>Pemeriksaan integrasi WhatsApp gateway</li>
+        </ul>
+        <p style="font-size:12px;font-weight:600;color:var(--blue-main);margin-top:12px">Estimasi: Rp [nominal] / bulan
+        </p>
+      </div>
+    </div>
+
+    <!-- ══ 14. KRITERIA KEBERHASILAN ══ -->
+    <div id="kriteria" class="section-header">
+      <div class="section-label">Bagian 14</div>
+      <h2 class="section-title">Kriteria Keberhasilan</h2>
+      <p class="section-desc">Implementasi dinyatakan berhasil apabila seluruh kriteria berikut terpenuhi</p>
+    </div>
+    <div class="criteria-grid">
+      <div class="crit-item">
+        <div class="crit-no">1</div>
+        <p>Admin dapat login ke dashboard SMPN 1 Kotabaru</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">2</div>
+        <p>Admin dapat mengelola data siswa, kelas, orang tua, guru, dan user</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">3</div>
+        <p>Data siswa dapat diimport menggunakan template Excel</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">4</div>
+        <p>RFID scanner dapat mencatat presensi siswa secara akurat</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">5</div>
+        <p>Sistem membedakan jam masuk dan jam pulang dengan benar</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">6</div>
+        <p>Data absensi tampil di dashboard secara real-time</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">7</div>
+        <p>Laporan dapat difilter berdasarkan periode dan kelas (Paket B)</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">8</div>
+        <p>Laporan grafis menampilkan data kehadiran (Paket B)</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">9</div>
+        <p>Notifikasi WhatsApp terkirim ke orang tua/wali (Paket B)</p>
+      </div>
+      <div class="crit-item">
+        <div class="crit-no">10</div>
+        <p>Sistem berhasil diakses melalui alamat production yang disepakati</p>
+      </div>
+    </div>
+
+    <!-- Pengembangan Lanjutan -->
+    <div class="section-header">
+      <div class="section-label">Tambahan</div>
+      <h2 class="section-title">Rekomendasi Pengembangan Lanjutan</h2>
+    </div>
+    <div class="future-list">
+      <div class="future-item">Export PDF &amp; Excel</div>
+      <div class="future-item">Dashboard kepala sekolah</div>
+      <div class="future-item">Akses wali kelas per kelas</div>
+      <div class="future-item">Modul izin/sakit/alpha</div>
+      <div class="future-item">Audit log aktivitas user</div>
+      <div class="future-item">Backup otomatis database</div>
+      <div class="future-item">Multi titik presensi</div>
+      <div class="future-item">Integrasi fingerprint/face</div>
+      <div class="future-item">Notifikasi Telegram/Email</div>
+      <div class="future-item">Portal orang tua siswa</div>
+      <div class="future-item">Aplikasi mobile guru/ortu</div>
+      <div class="future-item">Kalender akademik &amp; libur</div>
+    </div>
+
+    <!-- ══ 15. PENUTUP ══ -->
+    <div id="penutup" class="section-header">
+      <div class="section-label">Bagian 15</div>
+      <h2 class="section-title">Penutup</h2>
+    </div>
+    <div class="closing-box">
+      <h3>Mari Wujudkan SMPN 1 Kotabaru yang Lebih Modern &amp; Transparan</h3>
+      <p>Sistem Absensi Digital Berbasis RFID dan WhatsApp ini dirancang sebagai solusi praktis yang meningkatkan
+        kedisiplinan, transparansi, dan efisiensi pengelolaan kehadiran siswa. Dengan hardware RFID yang sudah termasuk,
+        VPS yang kami tanggung, dan dua pilihan paket yang fleksibel — SMPN 1 Kotabaru dapat langsung memulai
+        transformasi digital tanpa hambatan infrastruktur.</p>
+      <p style="color:rgba(255,255,255,0.7);font-size:12px">Kami dari <strong>Computer Media Utama</strong> siap
+        berdiskusi lebih lanjut mengenai kebutuhan spesifik SMPN 1 Kotabaru.</p>
+    </div>
+
+    <div class="signature-box">
+      <div class="sig-card">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:4px">Hormat kami,</p>
+        <p style="font-size:12px;color:var(--text-muted)"><strong>Computer Media Utama</strong></p>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:2px">Samarinda, 25 Mei 2026</p>
+        <div class="sig-line"></div>
+        <p class="sig-name">[Nama Penanggung Jawab]</p>
+        <p class="sig-title">[Jabatan]</p>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:4px">WA: [Nomor] · [Email]</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const B = '#1A52A8', T = '#0E9E7B', A = '#F59E0B', P = '#8B5CF6', G = '#ADB5BD';
+    const o = { responsive: true, maintainAspectRatio: false };
+
+    new Chart(document.getElementById('chartPaket'), {
+      type: 'bar',
+      data: {
+        labels: ['Setup & Infrastruktur', 'Fitur Presensi', 'Manajemen Data', 'Notif WhatsApp', 'Laporan & Grafis', 'Pelatihan'],
+        datasets: [
+          { label: 'Paket A', data: [5, 4, 5, 0, 0, 1], backgroundColor: B + 'CC', borderRadius: 6, borderSkipped: false },
+          { label: 'Paket B', data: [5, 4, 6, 4, 5, 2], backgroundColor: T + 'CC', borderRadius: 6, borderSkipped: false }
+        ]
+      },
+      options: { ...o, scales: { y: { beginAtZero: true, max: 8, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { stepSize: 2 } }, x: { grid: { display: false }, ticks: { font: { size: 10 } } } }, plugins: { legend: { position: 'top', labels: { boxWidth: 10, font: { size: 11 } } } } }
+    });
+
+    new Chart(document.getElementById('chartModul'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Presensi RFID', 'Laporan & Grafis', 'Dashboard Admin', 'Notif WhatsApp', 'Manajemen Data', 'Keamanan'],
+        datasets: [{ data: [20, 20, 20, 15, 15, 10], backgroundColor: [B, T, '#2D7DD2', A, P, G], borderWidth: 2, borderColor: '#fff', hoverOffset: 8 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 10, font: { size: 11 } } } } }
+    });
+
+    new Chart(document.getElementById('chartTimeline'), {
+      type: 'bar',
+      data: {
+        labels: ['Kickoff', 'Setup Server', 'Dashboard', 'RFID', 'Import Data', 'WhatsApp', 'Laporan', 'Testing', 'Deployment', 'Pendampingan'],
+        datasets: [{
+          label: 'Hari Kerja (estimasi)',
+          data: [3, 3, 6, 4, 5, 4, 6, 6, 3, 14],
+          backgroundColor: [B, B + 'AA', T, T + 'AA', B + '88', A, T + '88', P + 'AA', B + 'AA', G],
+          borderRadius: 6, borderSkipped: false
+        }]
+      },
+      options: { ...o, indexAxis: 'y', scales: { x: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { callback: v => v + ' hari' } }, y: { grid: { display: false }, ticks: { font: { size: 11 } } } }, plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.raw + ' hari kerja' } } } }
+    });
+
+    new Chart(document.getElementById('chartManfaat'), {
+      type: 'radar',
+      data: {
+        labels: ['Kecepatan Kerja', 'Akurasi Data', 'Kemudahan Laporan', 'Komunikasi Ortu', 'Pembinaan Siswa', 'Efisiensi Waktu'],
+        datasets: [
+          { label: 'Manajemen', data: [85, 90, 95, 80, 90, 85], borderColor: B, backgroundColor: B + '33', pointBackgroundColor: B, borderWidth: 2, pointRadius: 4 },
+          { label: 'Admin TU', data: [90, 95, 95, 70, 75, 90], borderColor: T, backgroundColor: T + '33', pointBackgroundColor: T, borderWidth: 2, pointRadius: 4 },
+          { label: 'Guru', data: [75, 85, 80, 80, 95, 85], borderColor: A, backgroundColor: A + '33', pointBackgroundColor: A, borderWidth: 2, pointRadius: 4 },
+          { label: 'Orang Tua', data: [80, 70, 60, 95, 70, 80], borderColor: P, backgroundColor: P + '33', pointBackgroundColor: P, borderWidth: 2, pointRadius: 4 }
+        ]
+      },
+      options: { responsive: true, maintainAspectRatio: false, scales: { r: { beginAtZero: true, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,0.07)' }, pointLabels: { font: { size: 11 } } } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } } } }
+    });
+  </script>
+</body>
+
+</html>
