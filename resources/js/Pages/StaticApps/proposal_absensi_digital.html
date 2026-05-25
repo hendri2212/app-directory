@@ -2538,6 +2538,11 @@
     </div>
   </div>
 
+  <!-- Back to Top Button -->
+  <button id="backToTopBtn" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 999; border: none; outline: none; background-color: var(--blue-main); color: white; cursor: pointer; padding: 12px 18px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.3s ease;">
+    ↑
+  </button>
+
   <script>
     const B = '#1A52A8', T = '#0E9E7B', A = '#F59E0B', P = '#8B5CF6', G = '#ADB5BD';
     const o = { responsive: true, maintainAspectRatio: false };
@@ -2589,6 +2594,17 @@
         ]
       },
       options: { responsive: true, maintainAspectRatio: false, scales: { r: { beginAtZero: true, max: 100, ticks: { display: false }, grid: { color: 'rgba(0,0,0,0.07)' }, pointLabels: { font: { size: 11 } } } }, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } } } }
+    });
+
+    window.addEventListener('scroll', function() {
+      const btn = document.getElementById('backToTopBtn');
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+        btn.style.display = 'block';
+        setTimeout(() => btn.style.opacity = '1', 10);
+      } else {
+        btn.style.opacity = '0';
+        setTimeout(() => { if (btn.style.opacity === '0') btn.style.display = 'none'; }, 300);
+      }
     });
   </script>
 </body>
