@@ -1006,6 +1006,13 @@
       margin: 40px 0
     }
 
+    .infra-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
     .info-bar {
       background: var(--blue-light);
       border-left: 4px solid var(--blue-mid);
@@ -1319,6 +1326,17 @@
 
       .arch-row {
         flex-direction: column;
+      }
+      .infra-grid {
+        display: flex !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 16px;
+        padding-bottom: 8px;
+      }
+      .infra-grid > div {
+        min-width: 260px;
+        flex: 0 0 auto;
       }
 
       .arch-arr {
@@ -2209,7 +2227,7 @@
       <div class="section-label">Bagian 9</div>
       <h2 class="section-title">Kebutuhan Infrastruktur</h2>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="infra-grid">
       <div style="border:1px solid var(--gray-200);border-radius:14px;padding:20px">
         <div style="font-size:24px;margin-bottom:12px">🖥️</div>
         <h4 style="font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px">Server / VPS</h4>
