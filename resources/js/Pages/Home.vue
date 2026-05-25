@@ -39,7 +39,7 @@
             </div>
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
-                <div class="col animate-fade-in index-stagger" v-for="(app, index) in apps" :key="app.id"
+                <div class="col animate-fade-in index-stagger" v-for="(app, index) in allApps" :key="app.id"
                     :style="`--delay: ${index * 0.1}s`">
                     <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden hover-card h-100">
                         <div class="position-relative overflow-hidden">
@@ -47,7 +47,11 @@
                                 style="height: 220px; object-fit: cover;">
                             <div
                                 class="card-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 opacity-0 transition-all">
-                                <Link :href="`/app/${app.id}`"
+                                <a v-if="app.isStatic" :href="app.staticUrl"
+                                    class="btn btn-light fw-bold rounded-pill px-4 transform-up">
+                                    Lihat Detail
+                                </a>
+                                <Link v-else :href="`/app/${app.id}`"
                                     class="btn btn-light fw-bold rounded-pill px-4 transform-up">
                                     Lihat Detail
                                 </Link>
@@ -65,7 +69,11 @@
 
                             <hr class="border-secondary opacity-10 my-3">
 
-                            <Link :href="`/app/${app.id}`"
+                            <a v-if="app.isStatic" :href="app.staticUrl"
+                                class="btn btn-link text-decoration-none p-0 fw-bold text-primary stretched-link d-inline-flex align-items-center">
+                                Selengkapnya <i class="bi bi-arrow-right ms-1 transition-icon"></i>
+                            </a>
+                            <Link v-else :href="`/app/${app.id}`"
                                 class="btn btn-link text-decoration-none p-0 fw-bold text-primary stretched-link d-inline-flex align-items-center">
                                 Selengkapnya <i class="bi bi-arrow-right ms-1 transition-icon"></i>
                             </Link>
@@ -80,9 +88,26 @@
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { Link, Head } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
     apps: Array,
+});
+
+const staticApps = [
+    {
+        id: 'static-e-presensi',
+        name: 'E-Presensi (RFID)',
+        short_desc: 'Sistem Elektronik Presensi Berbasis RFID terintegrasi dengan data pegawai untuk monitoring absensi yang akurat dan real-time.',
+        image: '/images/static/e-presensi.png',
+        tech_stack: ['RFID', 'Vue.js', 'Laravel'],
+        isStatic: true,
+        staticUrl: '/e-presensi'
+    }
+];
+
+const allApps = computed(() => {
+    return [...props.apps, ...staticApps];
 });
 </script>
 

@@ -7,6 +7,9 @@ use App\Http\Controllers\ApplicationController;
 
 Route::get('/', [ApplicationController::class, 'index'])->name('home');
 Route::get('/app/{id}', [ApplicationController::class, 'show'])->name('app.detail');
+Route::get('/e-presensi', function () {
+    return Inertia::render('StaticApps/EPresensi');
+})->name('static.e-presensi');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [ApplicationController::class, 'dashboard'])->name('dashboard');
